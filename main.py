@@ -12,6 +12,7 @@ def conectar():
     password = os.getenv('DB_PASSWORD')
     database = os.getenv('DB_NAME')
     try:
+        # mysql.connector.connect já é uma função só passo os argumentos
         conexao = mysql.connector.connect(host=host, user=user, password=password, database=database)
         print('Conexão bem sucedida!')
         return conexao
@@ -22,6 +23,6 @@ def conectar():
             print("Banco de dados não existe")
         else:
             print(f"Erro {err.errno}: {err.msg}")
-            return None
+        return None
 
 conectar()
