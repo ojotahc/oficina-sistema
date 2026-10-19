@@ -27,5 +27,7 @@ CREATE TABLE estoque (
     quantidade INT NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (produto_id) REFERENCES produtos(id),
-    UNIQUE (produto_id, status)
+    UNIQUE (produto_id, status),
+    CONSTRAINT chk_estoque_quantidade CHECK (quantidade >= 0),
+    CONSTRAINT chk_estoque_valor CHECK (valor >= 0)
 );
