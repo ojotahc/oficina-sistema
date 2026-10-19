@@ -10,7 +10,7 @@ create table clientes (
 	email varchar(100),
 	telefone varchar(20),
 	celular varchar(20) not null
-)
+);
 
 create table produtos (
 	id int auto_increment primary key,
@@ -20,11 +20,12 @@ create table produtos (
 	modelo_veiculo varchar(70)
 	);
 
-  CREATE TABLE estoque (
+CREATE TABLE estoque (
     id INT AUTO_INCREMENT PRIMARY KEY,
     produto_id INT NOT NULL,
     status ENUM('novo', 'usado', 'revisado', 'nao_funciona') NOT NULL,
     quantidade INT NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (produto_id) REFERENCES produtos(id)
+    FOREIGN KEY (produto_id) REFERENCES produtos(id),
+    UNIQUE (produto_id, status)
 );
