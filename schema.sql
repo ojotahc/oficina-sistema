@@ -39,3 +39,29 @@ CREATE TABLE formas_pagamento (
     CONSTRAINT chk_formas_pagamento_descricao CHECK (TRIM(descricao) <> '')
 );
 
+CREATE TABLE documentos (
+    numero_documento INT NOT NULL,
+    especie_documento ENUM('pedido', 'orcamento') NOT NULL,
+    codigo_cliente INT NOT NULL,
+    codigo_pagamento INT NOT NULL,
+    data_emissao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    servico_descricao VARCHAR(255),
+    servico_valor DECIMAL(10,2) NOT NULL DEFAULT 0,
+    subtotal DECIMAL(10,2) NOT NULL,
+    desconto DECIMAL(10,2) NOT NULL DEFAULT 0,
+    total DECIMAL(10,2) NOT NULL,
+    observacao VARCHAR(255),
+    PRIMARY KEY (numero_documento, especie_documento),
+    FOREIGN KEY (codigo_cliente) REFERENCES clientes(codigo_cliente),
+    FOREIGN KEY (codigo_pagamento) REFERENCES formas_pagamento(codigo_pagamento),
+    CONSTRAINT chk_documentos_servico CHECK (
+        servico_valor = 0
+        OR (servico_descricao IS NOT NULL AND TRIM(servico_descricao) <> '')
+    ),
+    CONSTRAINT chk_documentos_valores CHECK (
+        servico_valor >= 0 AND subtotal >= 0 AND desconto >= 0
+    ),
+    CONSTRAINT chk_documentos_total CHECK (
+        desconto <= subtotal AND total = subtotal - desconto
+    )
+);
