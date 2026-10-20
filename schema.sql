@@ -65,3 +65,22 @@ CREATE TABLE documentos (
         desconto <= subtotal AND total = subtotal - desconto
     )
 );
+
+CREATE TABLE itens_documento (
+    codigo_item INT AUTO_INCREMENT PRIMARY KEY,
+    numero_documento INT NOT NULL,
+    especie_documento ENUM('pedido', 'orcamento') NOT NULL,
+    id_estoque INT NOT NULL,
+    status ENUM('novo', 'usado', 'revisado', 'nao_funciona') NOT NULL,
+    codigo_fabrica VARCHAR(30) NOT NULL,
+    descricao VARCHAR(100) NOT NULL,
+    quantidade INT NOT NULL,
+    valor_unitario DECIMAL(10,2) NOT NULL,
+    valor_total DECIMAL(10,2) GENERATED ALWAYS AS (quantidade * valor_unitario) STORED,
+    FOREIGN KEY (numero_documento, especie_documento)
+        REFERENCES documentos (numero_documento, especie_documento),
+    FOREIGN KEY (id_estoque) REFERENCES estoque (id),
+    UNIQUE (numero_documento, especie_documento, id_estoque),
+    CONSTRAINT chk_itens_quantidade CHECK (quantidade > 0),
+    CONSTRAINT chk_itens_valor CHECK (valor_unitario >= 0)
+);
