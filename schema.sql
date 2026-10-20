@@ -31,3 +31,11 @@ CREATE TABLE estoque (
     CONSTRAINT chk_estoque_quantidade CHECK (quantidade >= 0),
     CONSTRAINT chk_estoque_valor CHECK (valor >= 0)
 );
+
+CREATE TABLE formas_pagamento (
+    codigo_pagamento INT AUTO_INCREMENT PRIMARY KEY,
+    descricao VARCHAR(50) NOT NULL UNIQUE,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+    CONSTRAINT chk_formas_pagamento_descricao CHECK (TRIM(descricao) <> '')
+);
+
